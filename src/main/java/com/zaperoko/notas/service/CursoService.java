@@ -115,6 +115,10 @@ public class CursoService {
 	public Optional<Curso> getCursosById(String id) {
 		return repositorio.findById(id);
 	}
+	
+	public List<Curso> getCursosByGrado(String grado) {
+		return repositorio.findByIdGrado(grado);
+	}
 
 	public Curso updateCurso(Curso curso) {
 		Optional<Curso> busquedaCurso = repositorio.findByDescripcionCurso(curso.getDescripcionCurso());

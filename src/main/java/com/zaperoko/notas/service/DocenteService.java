@@ -78,19 +78,28 @@ public class DocenteService {
 		return docenteRepositorio.save(docente);
 	}
 
-	/*
-	 * public String deleteDocente(String id) { Optional<Docente> docente =
-	 * docenteRepositorio.findById(id); if (docente.isPresent()) { Optional<Usuario>
-	 * busquedaDocente =
-	 * usuarioRepositorio.findByUsuario(docente.get().getNumeroDocumento()); if
-	 * (busquedaDocente.isPresent()) {
-	 * usuarioRepositorio.delete(busquedaDocente.get()); } List<ProfesorAsignatura>
-	 * busquedaProfesor =
-	 * proAsigrepositorio.findByProfesorId(docente.get().getId()); if
-	 * (busquedaProfesor.size() > 0) { for (int i = 0; i < busquedaProfesor.size();
-	 * i++) { busquedaProfesor.get(i).setProfesorId("");
-	 * proAsigrepositorio.save(busquedaProfesor.get(i)); } }
-	 * docenteRepositorio.delete(docente.get()); return "Eliminado Correctamente"; }
-	 * return "No existe ningun registro con ese id"; }
-	 */
+	public String deleteDocente(String id) {
+		Optional<Docente> docente = docenteRepositorio.findById(id);
+		if (docente.isPresent()) {
+			Optional<Usuario> busquedaDocente = usuarioRepositorio.findByUsuario(docente.get().getNumeroDocumento());
+			if (busquedaDocente.isPresent()) {
+				usuarioRepositorio.delete(busquedaDocente.get());
+			}
+			List<ProfesorAsignatura> busquedaProfesor = proAsigrepositorio.findByProfesorId(docente.get().getId());
+			if (busquedaProfesor.size() > 0) {
+				for (int i = 0; i < busquedaProfesor.size(); i++) {
+					for (int j = 0; j < busquedaProfesor.get(i).getProfesorId().size(); j++) {
+						if (busquedaProfesor.get(i).getProfesorId().get(j).equals(id)) {
+							busquedaProfesor.get(i).getProfesorId().remove(j);
+						}
+					}
+					proAsigrepositorio.save(busquedaProfesor.get(i));
+				}
+			}
+			docenteRepositorio.delete(docente.get());
+			return "Eliminado Correctamente";
+		}
+		return "No existe ningun registro con ese id";
+	}
+
 }

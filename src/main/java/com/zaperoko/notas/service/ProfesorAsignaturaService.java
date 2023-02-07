@@ -36,6 +36,10 @@ public class ProfesorAsignaturaService {
 	public Optional<ProfesorAsignatura> getByAsignatura(String asignatura) {
 		return repositorio.findByAsignaturaId(asignatura);
 	}
+	
+	public Optional<ProfesorAsignatura> getById(String id) {
+		return repositorio.findById(id);
+	}
 
 	public String deleteProfesorAsignatura(String id) {
 		Optional<ProfesorAsignatura> profesorAsignatura = repositorio.findById(id);

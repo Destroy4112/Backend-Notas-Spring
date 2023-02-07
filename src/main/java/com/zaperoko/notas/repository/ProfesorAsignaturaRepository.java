@@ -12,6 +12,7 @@ import com.zaperoko.notas.model.ProfesorAsignatura;
 @Repository
 public interface ProfesorAsignaturaRepository extends MongoRepository<ProfesorAsignatura, String> {
 
+	@Query("{ profesorId: { $in : ['?0'] } }")
 	public List<ProfesorAsignatura> findByProfesorId(String profesorId);
 
 	public Optional<ProfesorAsignatura> findByAsignaturaId(String asignaturaId);

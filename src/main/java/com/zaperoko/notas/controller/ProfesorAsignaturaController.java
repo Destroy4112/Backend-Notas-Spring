@@ -42,6 +42,11 @@ public class ProfesorAsignaturaController {
     public ResponseEntity<?> consultarPorProfesor(@PathVariable String asignatura) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getByAsignatura(asignatura));
     }
+    
+    @GetMapping("/id/{id}")
+    public ResponseEntity<?> consultarPorId(@PathVariable String id) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getById(id));
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProfesorAsignatura(@PathVariable String id) {

@@ -20,47 +20,46 @@ import com.zaperoko.notas.service.DocenteService;
 @RequestMapping("api/docentes")
 @CrossOrigin(origins = "*")
 public class DocentesController {
-    
-    @Autowired
-    private DocenteService docenteServicio;
 
-    @PostMapping
-    public ResponseEntity<?> crearDocente(@RequestBody Docente docente){
-        Docente resultado = docenteServicio.addDocente(docente);
-        if(resultado == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resultado);
-        }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(resultado);
-    }
+	@Autowired
+	private DocenteService docenteServicio;
 
-    @GetMapping
-    public ResponseEntity<?> consultarDocentes(){
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(docenteServicio.getConsultarDocentes());
-    }
+	@PostMapping
+	public ResponseEntity<?> crearDocente(@RequestBody Docente docente) {
+		Docente resultado = docenteServicio.addDocente(docente);
+		if (resultado == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resultado);
+		}
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(resultado);
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> consultarDocentePorId(@PathVariable String id){
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(docenteServicio.getDocenteById(id));
-    }
+	@GetMapping
+	public ResponseEntity<?> consultarDocentes() {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(docenteServicio.getConsultarDocentes());
+	}
 
-    @GetMapping("/documento/{descripcion}")
-    public ResponseEntity<?> consultarDocentePorDocumento(@PathVariable String descripcion){
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(docenteServicio.getDocenteByDocumento(descripcion));
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<?> consultarDocentePorId(@PathVariable String id) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(docenteServicio.getDocenteById(id));
+	}
 
-    @PutMapping
-    public ResponseEntity<?> actualizarDocente(@RequestBody Docente docente){
-        Docente resultado = docenteServicio.updateDocente(docente);
-        if(resultado == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Hay campos vacios");
-        }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(resultado);
-    }
+	@GetMapping("/documento/{descripcion}")
+	public ResponseEntity<?> consultarDocentePorDocumento(@PathVariable String descripcion) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(docenteServicio.getDocenteByDocumento(descripcion));
+	}
 
-	/*
-	 * @DeleteMapping("/{id}") public ResponseEntity<?>
-	 * eliminarDocente(@PathVariable String id){ return
-	 * ResponseEntity.status(HttpStatus.ACCEPTED).body(docenteServicio.deleteDocente
-	 * (id)); }
-	 */
+	@PutMapping
+	public ResponseEntity<?> actualizarDocente(@RequestBody Docente docente) {
+		Docente resultado = docenteServicio.updateDocente(docente);
+		if (resultado == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Hay campos vacios");
+		}
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(resultado);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> eliminarDocente(@PathVariable String id) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(docenteServicio.deleteDocente(id));
+	}
+
 }

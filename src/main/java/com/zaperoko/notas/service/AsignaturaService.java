@@ -1,7 +1,6 @@
 package com.zaperoko.notas.service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,11 +41,6 @@ public class AsignaturaService {
 			busquedaGrado.get().setAsignaturaId(grado);
 			repositorioGrado.save(busquedaGrado.get());
 
-			ProfesorAsignatura profAsignatura = new ProfesorAsignatura();
-			profAsignatura.setAsignaturaId(resultado.getId());
-			profAsignatura.setProfesorId(new ArrayList<>());
-			profAsignatura.setIdCurso("");
-			repositorioProfesor.insert(profAsignatura);
 			return resultado;
 		}
 		return null;
@@ -96,9 +90,11 @@ public class AsignaturaService {
 	public String deleteAsignatura(String id) {
 		Optional<Asignatura> asignaturaEncontrada = repositorio.findById(id);
 		if (asignaturaEncontrada.isPresent()) {
-			Optional<ProfesorAsignatura> busqueda = repositorioProfesor.findByAsignaturaId(id);
-			if (busqueda.isPresent()) {
-				repositorioProfesor.delete(busqueda.get());
+			List<ProfesorAsignatura> busqueda = repositorioProfesor.findByAsignaturaId(id);
+			if (busqueda.size() > 0) {
+				for (int i = 0; i < busqueda.size(); i++) {
+					repositorioProfesor.delete(busqueda.get(i));
+				}
 			}
 			List<Grado> cursosEncontrados = repositorioGrado.findByAsignatura(id);
 			if (cursosEncontrados.size() > 0) {
@@ -112,10 +108,6 @@ public class AsignaturaService {
 						repositorioGrado.save(cursosEncontrados.get(i));
 					}
 				}
-			}
-			Optional<ProfesorAsignatura> profAsignaturas = repositorioProfesor.findByAsignaturaId(id);
-			if (profAsignaturas.isPresent()) {
-				repositorioProfesor.delete(profAsignaturas.get()); 
 			}
 			repositorio.delete(asignaturaEncontrada.get());
 			return "eliminado " + id;

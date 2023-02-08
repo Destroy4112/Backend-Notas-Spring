@@ -88,11 +88,7 @@ public class DocenteService {
 			List<ProfesorAsignatura> busquedaProfesor = proAsigrepositorio.findByProfesorId(docente.get().getId());
 			if (busquedaProfesor.size() > 0) {
 				for (int i = 0; i < busquedaProfesor.size(); i++) {
-					for (int j = 0; j < busquedaProfesor.get(i).getProfesorId().size(); j++) {
-						if (busquedaProfesor.get(i).getProfesorId().get(j).equals(id)) {
-							busquedaProfesor.get(i).getProfesorId().remove(j);
-						}
-					}
+					busquedaProfesor.get(i).setProfesorId("");
 					proAsigrepositorio.save(busquedaProfesor.get(i));
 				}
 			}

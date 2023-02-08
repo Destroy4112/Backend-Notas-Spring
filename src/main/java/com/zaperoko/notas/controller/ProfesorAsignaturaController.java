@@ -25,8 +25,8 @@ public class ProfesorAsignaturaController {
     private ProfesorAsignaturaService servicio;
 
     @PostMapping
-    public ResponseEntity<?> actualizarProfesorAsignatura(@RequestBody ProfesorAsignatura profesorAsignatura) {
-        ProfesorAsignatura resultado = servicio.actualizarProfesorAsignatura(profesorAsignatura);
+    public ResponseEntity<?> agregarProfesorAsignatura(@RequestBody ProfesorAsignatura profesorAsignatura) {
+        ProfesorAsignatura resultado = servicio.addProfesorAsignatura(profesorAsignatura);
         if (resultado == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Algo salío mal");
         }
@@ -46,6 +46,15 @@ public class ProfesorAsignaturaController {
     @GetMapping("/id/{id}")
     public ResponseEntity<?> consultarPorId(@PathVariable String id) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getById(id));
+    }
+    
+    @PutMapping
+    public ResponseEntity<?> actualizarProfesorAsignatura(@RequestBody ProfesorAsignatura profesorAsignatura) {
+        ProfesorAsignatura resultado = servicio.actualizarProfesorAsignatura(profesorAsignatura);
+        if (resultado == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Algo salío mal");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
     }
 
     @DeleteMapping("/{id}")

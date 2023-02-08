@@ -1,7 +1,5 @@
 package com.zaperoko.notas.model;
 
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,7 +8,7 @@ public class ProfesorAsignatura {
     
     @Id
     private String id;
-    private List<String> profesorId;
+    private String profesorId;
     private String asignaturaId;
     private String idCurso;
     
@@ -26,11 +24,11 @@ public class ProfesorAsignatura {
 		this.id = id;
 	}
 
-	public List<String> getProfesorId() {
+	public String getProfesorId() {
 		return profesorId;
 	}
 
-	public void setProfesorId(List<String> profesorId) {
+	public void setProfesorId(String profesorId) {
 		this.profesorId = profesorId;
 	}
 

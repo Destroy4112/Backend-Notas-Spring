@@ -53,8 +53,16 @@ public class AcudienteService {
 				return acudienteEncontrado.get();
 			}
 		}
-		return null;
+		Acudiente acudienteNuevo = new Acudiente();
+        acudienteNuevo.setNombres(acudiente.getNombres());
+        acudienteNuevo.setApellidos(acudiente.getApellidos());
+        acudienteNuevo.setTipoDocumento(acudiente.getTipoDocumento());
+        acudienteNuevo.setNumeroDocumento(acudiente.getNumeroDocumento());
+        acudienteNuevo.setTelefono(acudiente.getTelefono());
+        acudienteNuevo.setDireccion(acudiente.getDireccion());
+        acudienteNuevo.setIdAlumno(acudiente.getIdAlumno());
 
+        return repositorio.save(acudienteNuevo);
 	}
 
 	public String deleteAcudiente(String idAcudiente) {

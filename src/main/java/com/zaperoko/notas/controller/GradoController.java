@@ -34,12 +34,12 @@ public class GradoController {
     }
 
     @GetMapping
-    public ResponseEntity<?> readGrupos() {
+    public ResponseEntity<?> readGrados() {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getGrados());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> readGrupoById(@PathVariable String id) {
+    public ResponseEntity<?> readGradoById(@PathVariable String id) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getGradoById(id));
     }
 

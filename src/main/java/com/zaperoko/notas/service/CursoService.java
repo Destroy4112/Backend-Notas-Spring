@@ -90,7 +90,23 @@ public class CursoService {
 	}
 	
 	public Optional<Curso> getCursoByDescripcion(String descripcion){
-		return repositorio.findByDescripcionCurso(descripcion);
+		Optional<Curso> cursoEncontrado=repositorio.findByDescripcionCurso(descripcion);
+		if(cursoEncontrado.isPresent()){
+			if (!cursoEncontrado.get().getIdGrado().equals("")) {
+				cursoEncontrado.get().setDescripcionGrado(
+						gradoRepositorio.findById(cursoEncontrado.get().getIdGrado()).get().getDescripcionGrado());
+			}
+			if (!cursoEncontrado.get().getIdGrupo().equals("")) {
+				cursoEncontrado.get().setDescripcionGrupo(
+						grupoRepositorio.findById(cursoEncontrado.get().getIdGrupo()).get().getNombreGrupo());
+			}
+			if (!cursoEncontrado.get().getIdYear().equals("")) {
+				cursoEncontrado.get().setDescripcionYear(
+						yearRepositorio.findById(cursoEncontrado.get().getIdYear()).get().getDescripcionYear());
+			}
+		}
+
+		return cursoEncontrado;
 	}
 
 	public List<Curso> getCursos() {

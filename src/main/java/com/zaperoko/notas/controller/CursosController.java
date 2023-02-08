@@ -47,6 +47,7 @@ public class CursosController {
     public ResponseEntity<?> consultarCursoPorDescripcion(@PathVariable String descripcion) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursoByDescripcion(descripcion));
     }
+    
     @GetMapping("/grado/{grado}")
     public ResponseEntity<?> consultarCursoPorGrado(@PathVariable String grado) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursosByGrado(grado));

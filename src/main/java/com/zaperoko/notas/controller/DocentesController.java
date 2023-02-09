@@ -47,6 +47,11 @@ public class DocentesController {
 	public ResponseEntity<?> consultarDocentePorDocumento(@PathVariable String descripcion) {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(docenteServicio.getDocenteByDocumento(descripcion));
 	}
+	
+	@GetMapping("/nombreCompleto/{nombre}/{apellido}")
+	public ResponseEntity<?> consultarDocentePorDocumento(@PathVariable String nombre,@PathVariable String apellido) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(docenteServicio.getDocenteByNombreCompleto(nombre, apellido));
+	}
 
 	@PutMapping
 	public ResponseEntity<?> actualizarDocente(@RequestBody Docente docente) {

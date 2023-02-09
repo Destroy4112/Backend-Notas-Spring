@@ -48,6 +48,11 @@ public class ProfesorAsignaturaController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getById(id));
     }
     
+    @GetMapping("/docente/{profesor}")
+    public ResponseEntity<?> consultarPorDocente(@PathVariable String profesor) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getByProfesor(profesor));
+    }
+    
     @PutMapping
     public ResponseEntity<?> actualizarProfesorAsignatura(@RequestBody ProfesorAsignatura profesorAsignatura) {
         ProfesorAsignatura resultado = servicio.actualizarProfesorAsignatura(profesorAsignatura);

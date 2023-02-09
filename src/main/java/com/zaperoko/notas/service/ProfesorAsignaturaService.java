@@ -27,6 +27,10 @@ public class ProfesorAsignaturaService {
 		return repositorio.findByAsignaturaId(asignatura);
 	}
 	
+	public List<ProfesorAsignatura> getByProfesor(String profesor) {
+		return repositorio.findByProfesorId(profesor);
+	}
+	
 	public Optional<ProfesorAsignatura> getById(String id) {
 		return repositorio.findById(id);
 	}

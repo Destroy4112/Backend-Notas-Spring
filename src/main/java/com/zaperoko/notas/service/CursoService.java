@@ -33,14 +33,10 @@ public class CursoService {
 	private YearRepository yearRepositorio;
 	
 	public Curso addCurso(Curso curso) {
-		Optional<Curso> busquedaCurso = repositorio.findByDescripcionCurso(curso.getDescripcionCurso());
-		if (busquedaCurso.isPresent()) {
-			busquedaCurso.get().setDescripcionGrado("registrado");
-			return busquedaCurso.get();
-		}
+	
 		Optional<Curso> validacion = repositorio.buscarCurso(curso.getIdGrado(), curso.getIdGrupo(), curso.getIdYear());
 		if (validacion.isPresent()) {
-			busquedaCurso.get().setDescripcionGrado("registrado");
+			validacion.get().setDescripcionGrado("registrado");
 			return validacion.get();
 		}
 		Optional<Grupo> grupoEncontrado = grupoRepositorio.findById(curso.getIdGrupo());

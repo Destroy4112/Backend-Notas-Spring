@@ -1,6 +1,7 @@
 package com.zaperoko.notas.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,6 +60,7 @@ public class EstudianteService {
 					.setNombreAcudiente(repoAcudiente.findById(estudiante.get(i).getIdAcudiente()).get().getNombres());
 			}
 		}
+		estudiante.sort(Comparator.comparing(Estudiante::getNombres));
 		return estudiante;
 	}
 

@@ -1,11 +1,13 @@
 package com.zaperoko.notas.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zaperoko.notas.model.Asignatura;
 import com.zaperoko.notas.model.Curso;
 import com.zaperoko.notas.model.Year;
 import com.zaperoko.notas.repository.CursosRepository;
@@ -32,7 +34,9 @@ public class YearService {
 	}
 
 	public List<Year> getYears() {
-		return repositorio.findAll();
+		List<Year> years = repositorio.findAll();
+		years.sort(Comparator.comparing(Year::getDescripcionYear));
+		return years;
 	}
 
 	public Optional<Year> getYearsById(String id) {

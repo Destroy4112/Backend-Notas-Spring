@@ -52,6 +52,10 @@ public class DocenteService {
 	public Optional<Docente> getDocenteByDocumento(String descripcion) {
 		return docenteRepositorio.findByNumeroDocumento(descripcion);
 	}
+	
+	public Optional<Docente> getDocenteByNombreCompleto(String nombre, String apellidos) {
+		return docenteRepositorio.findByNombresAndApellidos(nombre, apellidos);
+	}
 
 	public Docente updateDocente(Docente docente) {
 		Optional<Docente> busquedaDocente = docenteRepositorio.findByNumeroDocumento(docente.getNumeroDocumento());

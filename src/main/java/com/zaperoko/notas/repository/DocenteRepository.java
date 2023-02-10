@@ -16,6 +16,9 @@ public interface DocenteRepository extends MongoRepository<Docente, String> {
 
     @Query("{ id:?0, numeroDocumento:'?1' }")
     public Optional<Docente> findByIdAndDocumento(String id, String documento);
+    
+    @Query("{ nombres:?0, apellidos:'?1' }")
+    public Optional<Docente> findByNombresAndApellidos(String nombre, String apellido);
 
     public List<Docente> findByIdRol(String idRol);
 }

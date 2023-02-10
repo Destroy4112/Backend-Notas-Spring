@@ -12,17 +12,20 @@ import com.zaperoko.notas.model.Curso;
 @Repository
 public interface CursosRepository extends MongoRepository<Curso, String> {
 
-    public Optional<Curso> findByDescripcionCurso(String descripcionCurso);
+	public Optional<Curso> findByDescripcionCurso(String descripcionCurso);
 
-    @Query("{idGrado:'?0', idGrupo:'?1', idYear:'?2'}")
-    public Optional<Curso> buscarCurso(String grado, String grupo, String year);
+	@Query("{idGrado:'?0', idGrupo:'?1', idYear:'?2'}")
+	public Optional<Curso> buscarCurso(String grado, String grupo, String year);
 
-    @Query("{ descripcionCurso:?0, idYear:'?1' }")
-    public Optional<Curso> findCursoByDescripcion(String descripcionCurso, String idYear);
+	@Query("{ descripcionCurso:?0, idYear:'?1' }")
+	public Optional<Curso> findCursoByDescripcion(String descripcionCurso, String idYear);
 
-    public List<Curso> findByIdGrado(String idGrado);
+	public List<Curso> findByIdGrado(String idGrado);
 
-    public List<Curso> findByIdGrupo(String idGrupo);
+	public List<Curso> findByIdGrupo(String idGrupo);
 
-    public List<Curso> findByIdYear(String idYear);
+	public List<Curso> findByIdYear(String idYear);
+
+	@Query("{ idProfesorAsignatura: { $in : ['?0'] } }")
+	public Optional<Curso> findByIdProfesorAsignatura(String asignatura);
 }

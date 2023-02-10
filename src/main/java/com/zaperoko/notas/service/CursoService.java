@@ -32,20 +32,12 @@ public class CursoService {
 	private GradoRepository gradoRepositorio;
 	@Autowired
 	private YearRepository yearRepositorio;
-	@Autowired
-	private AlumnoCursoRepository repositorioAlumnoCurso;
-	@Autowired
-	private ProfesorAsignaturaRepository repositorioProfesorAsignatura;
-
+	
 	public Curso addCurso(Curso curso) {
-		Optional<Curso> busquedaCurso = repositorio.findByDescripcionCurso(curso.getDescripcionCurso());
-		if (busquedaCurso.isPresent()) {
-			busquedaCurso.get().setDescripcionGrado("registrado");
-			return busquedaCurso.get();
-		}
+	
 		Optional<Curso> validacion = repositorio.buscarCurso(curso.getIdGrado(), curso.getIdGrupo(), curso.getIdYear());
 		if (validacion.isPresent()) {
-			busquedaCurso.get().setDescripcionGrado("registrado");
+			validacion.get().setDescripcionGrado("registrado");
 			return validacion.get();
 		}
 		Optional<Grupo> grupoEncontrado = grupoRepositorio.findById(curso.getIdGrupo());
@@ -137,6 +129,11 @@ public class CursoService {
 	public List<Curso> getCursosByGrado(String grado) {
 		return repositorio.findByIdGrado(grado);
 	}
+	
+	public Optional<Curso> getCursosByAsignatura(String grado) {
+		return repositorio.findByIdProfesorAsignatura(grado);
+	}
+	
 
 	public Curso updateCurso(Curso curso) {
 		Optional<Curso> busquedaCurso = repositorio.findByDescripcionCurso(curso.getDescripcionCurso());

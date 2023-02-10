@@ -27,18 +27,20 @@ public class AlumnoCursoService {
 		Optional<AlumnoCurso> registroEncontrado = repositorio.findAlumnoCurso(detalle.getIdCurso(),
 				detalle.getIdEstudiante());
 		if (registroEncontrado.isPresent()) {
+			registroEncontrado.get().setIdCurso(registroEncontrado.get().getIdCurso() + " registrado");
 			return registroEncontrado.get();
 		}
-		Optional<AlumnoCurso> estudiante = repositorio.findByIdEstudiantes(detalle.getIdEstudiante());
-
-		if (estudiante.isPresent()) {
-			Optional<Curso> curso = repositorioCurso.findById(detalle.getIdCurso());
-			if (curso.isPresent()) {
+		List<AlumnoCurso> estudianteCursoEncontrado = repositorio.findByIdEstudiante(detalle.getIdEstudiante());
+		Optional<Curso> curso = repositorioCurso.findById(detalle.getIdCurso());
+		if (curso.isPresent()) {
+			if (estudianteCursoEncontrado.size()==1 && estudianteCursoEncontrado.get(0).getIdCurso()==null) {
+				estudianteCursoEncontrado.get(0).setIdCurso(detalle.getIdCurso());
+				return repositorio.save(estudianteCursoEncontrado.get(0));
+			} else {
 				return repositorio.save(detalle);
 			}
 		}
 		return null;
-
 	}
 
 	public List<AlumnoCurso> getAlumnoCursos() {

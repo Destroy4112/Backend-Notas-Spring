@@ -14,6 +14,8 @@ public interface AlumnoCursoRepository extends MongoRepository<AlumnoCurso, Stri
 
     public List<AlumnoCurso> findByIdEstudiante(String idestudiante);
 
+    public List<AlumnoCurso> findByIdCurso(String idCurso);
+
     @Query("{alumnoId:'?0'}")
     public Optional<AlumnoCurso> findByIdEstudiantes(String idestudiantes);
 

@@ -1,11 +1,13 @@
 package com.zaperoko.notas.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zaperoko.notas.model.Asignatura;
 import com.zaperoko.notas.model.Docente;
 import com.zaperoko.notas.model.ProfesorAsignatura;
 import com.zaperoko.notas.model.Usuario;
@@ -42,7 +44,9 @@ public class DocenteService {
 	}
 
 	public List<Docente> getConsultarDocentes() {
-		return docenteRepositorio.findAll();
+		List<Docente> docentes = docenteRepositorio.findAll();
+		docentes.sort(Comparator.comparing(Docente::getNombres));
+		return docentes;
 	}
 
 	public Optional<Docente> getDocenteById(String id) {

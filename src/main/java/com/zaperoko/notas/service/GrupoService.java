@@ -1,5 +1,6 @@
 package com.zaperoko.notas.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,9 @@ public class GrupoService {
 	}
 
 	public List<Grupo> getGrupos() {
-		return repositorio.findAll();
+		List<Grupo> grupos = repositorio.findAll();
+		grupos.sort(Comparator.comparing(Grupo::getNombreGrupo));
+		return grupos;
 	}
 
 	public Optional<Grupo> getGrupo(String id) {

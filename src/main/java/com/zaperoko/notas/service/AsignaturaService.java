@@ -1,6 +1,7 @@
 package com.zaperoko.notas.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +53,7 @@ public class AsignaturaService {
 			asignaturas.get(i).setNombreGrado(
 					repositorioGrado.findById(asignaturas.get(i).getGrado()).get().getDescripcionGrado());
 		}
+		asignaturas.sort(Comparator.comparing(Asignatura::getDescripcionAsignatura));
 		return asignaturas;
 	}
 

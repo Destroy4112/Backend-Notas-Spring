@@ -19,8 +19,7 @@ public class AlumnoCursoService {
 	private AlumnoCursoRepository repositorio;
 	@Autowired
 	private CursosRepository repositorioCurso;
-	@Autowired
-	private EstudianteRepository repositorioAlumno;
+
 
 	public AlumnoCurso addAlumnoCurso(AlumnoCurso detalle) {
 		Optional<AlumnoCurso> registroEncontrado = repositorio.findAlumnoCurso(detalle.getIdCurso(),

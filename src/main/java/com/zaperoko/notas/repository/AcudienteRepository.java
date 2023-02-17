@@ -15,4 +15,5 @@ public interface AcudienteRepository extends MongoRepository<Acudiente, String> 
 
     @Query("{ idAlumno: { $in : ['?0'] } }")
     public Optional<Acudiente> findByEstudiante(String id);
+    
 }

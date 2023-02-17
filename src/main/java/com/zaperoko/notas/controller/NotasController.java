@@ -18,29 +18,46 @@ import com.zaperoko.notas.service.NotaService;
 
 @RestController
 @RequestMapping("/api/notas")
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class NotasController {
-    @Autowired
-    private NotaService servicio;
+	@Autowired
+	private NotaService servicio;
 
-    @PostMapping
-    public ResponseEntity<?> crearNotas(@RequestBody Nota nota) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.addNota(nota));
-    }
+	@PostMapping
+	public ResponseEntity<?> crearNotas(@RequestBody Nota nota) {
+		Nota resultado = servicio.addNota(nota);
+		if (resultado == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Algo salio mal");
+		} else {
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(resultado);
+		}
+	}
 
-    @GetMapping
-    public ResponseEntity<?> cargarNotas() {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getNotas());
-    }
+	@GetMapping
+	public ResponseEntity<?> cargarNotas() {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getNotas());
+	}
 
-    @PutMapping
-    public ResponseEntity<?> updateGrado(@RequestBody Nota nota) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.updateNota(nota));
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<?> cargarNotasByAlumno(@PathVariable String id) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getNotasByAlumno(id));
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminarNotas(@PathVariable String id) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.deleteNota(id));
-    }
+	@GetMapping("/alumno_Asignatura/{alumnoCurso}/{profesorAsignatura}")
+	public ResponseEntity<?> cargarNotasPorAlumnoYAsignatura(@PathVariable String alumnoCurso,
+			@PathVariable String profesorAsignatura) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED)
+				.body(servicio.getNotasByAlumnoAndAsignatura(alumnoCurso, profesorAsignatura));
+	}
+
+	@PutMapping
+	public ResponseEntity<?> updateGrado(@RequestBody Nota nota) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.updateNota(nota));
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> eliminarNotas(@PathVariable String id) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.deleteNota(id));
+	}
 
 }

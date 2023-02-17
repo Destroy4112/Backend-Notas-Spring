@@ -16,7 +16,7 @@ import com.zaperoko.notas.service.AlumnoCursoService;
 
 @RestController
 @RequestMapping("api/alumno_curso")
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class AlumnoCursoController {
 
     @Autowired
@@ -40,6 +40,11 @@ public class AlumnoCursoController {
     @GetMapping("/estudiante/{id}")
     public ResponseEntity<?> consultarAlumnoCursoPorEstudiante(@PathVariable String id) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getAlumnoCursosByAlumno(id));
+    }
+    
+    @GetMapping("/alumno_asignatura/{curso}/{estudiante}")
+    public ResponseEntity<?> consultarAlumnoCursoPorCursoyEstudiante(@PathVariable String curso, @PathVariable String estudiante) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getAlumnoCursosByAlumnoAndCurso(curso, estudiante));
     }
 
 }

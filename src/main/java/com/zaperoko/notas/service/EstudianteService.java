@@ -46,6 +46,7 @@ public class EstudianteService {
 
 		AlumnoCurso alumnoCurso = new AlumnoCurso();
 		alumnoCurso.setIdEstudiante(resultado.getId());
+		alumnoCurso.setIdCurso("");
 		repoAlumnoCurso.insert(alumnoCurso);
 
 		return resultado;

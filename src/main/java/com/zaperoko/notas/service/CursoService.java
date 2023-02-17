@@ -8,17 +8,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zaperoko.notas.model.AlumnoCurso;
 import com.zaperoko.notas.model.Curso;
 import com.zaperoko.notas.model.Grado;
 import com.zaperoko.notas.model.Grupo;
-import com.zaperoko.notas.model.ProfesorAsignatura;
 import com.zaperoko.notas.model.Year;
-import com.zaperoko.notas.repository.AlumnoCursoRepository;
 import com.zaperoko.notas.repository.CursosRepository;
 import com.zaperoko.notas.repository.GradoRepository;
 import com.zaperoko.notas.repository.GruposRepository;
-import com.zaperoko.notas.repository.ProfesorAsignaturaRepository;
 import com.zaperoko.notas.repository.YearRepository;
 
 @Service
@@ -32,9 +28,9 @@ public class CursoService {
 	private GradoRepository gradoRepositorio;
 	@Autowired
 	private YearRepository yearRepositorio;
-	
+
 	public Curso addCurso(Curso curso) {
-	
+
 		Optional<Curso> validacion = repositorio.buscarCurso(curso.getIdGrado(), curso.getIdGrupo(), curso.getIdYear());
 		if (validacion.isPresent()) {
 			validacion.get().setDescripcionGrado("registrado");
@@ -81,10 +77,10 @@ public class CursoService {
 		}
 		return null;
 	}
-	
-	public Optional<Curso> getCursoByDescripcion(String descripcion){
-		Optional<Curso> cursoEncontrado=repositorio.findByDescripcionCurso(descripcion);
-		if(cursoEncontrado.isPresent()){
+
+	public Optional<Curso> getCursoByDescripcion(String descripcion) {
+		Optional<Curso> cursoEncontrado = repositorio.findByDescripcionCurso(descripcion);
+		if (cursoEncontrado.isPresent()) {
 			if (!cursoEncontrado.get().getIdGrado().equals("")) {
 				cursoEncontrado.get().setDescripcionGrado(
 						gradoRepositorio.findById(cursoEncontrado.get().getIdGrado()).get().getDescripcionGrado());
@@ -100,6 +96,10 @@ public class CursoService {
 		}
 
 		return cursoEncontrado;
+	}
+
+	public Optional<Curso> getCursoByIdAlumnoCursoAndYear(String alumnoCursoId, String idYear) {
+		return repositorio.findByIdAlumnoCursoAndIdYear(alumnoCursoId, idYear);
 	}
 
 	public List<Curso> getCursos() {
@@ -125,26 +125,25 @@ public class CursoService {
 	public Optional<Curso> getCursosById(String id) {
 		return repositorio.findById(id);
 	}
-	
+
 	public List<Curso> getCursosByGrado(String grado) {
 		return repositorio.findByIdGrado(grado);
 	}
-	
+
 	public Optional<Curso> getCursosByAsignatura(String grado) {
 		return repositorio.findByIdProfesorAsignatura(grado);
 	}
-	
 
 	public Curso updateCurso(Curso curso) {
 		Optional<Curso> busquedaCurso = repositorio.findByDescripcionCurso(curso.getDescripcionCurso());
-		if (busquedaCurso.isPresent()){
-			if(busquedaCurso.get().getIdCurso().equals(curso.getIdCurso())){					
+		if (busquedaCurso.isPresent()) {
+			if (busquedaCurso.get().getIdCurso().equals(curso.getIdCurso())) {
 				return repositorio.save(curso);
 			} else {
-				if (busquedaCurso.get().getIdYear().equals(curso.getIdYear())){
-					busquedaCurso.get().setDescripcionCurso(busquedaCurso.get().getDescripcionCurso()+ " registrado");
+				if (busquedaCurso.get().getIdYear().equals(curso.getIdYear())) {
+					busquedaCurso.get().setDescripcionCurso(busquedaCurso.get().getDescripcionCurso() + " registrado");
 					return busquedaCurso.get();
-				} else {					
+				} else {
 					return repositorio.save(curso);
 				}
 			}
@@ -153,11 +152,10 @@ public class CursoService {
 			if (cursobyId.isPresent()) {
 				return repositorio.save(curso);
 			}
-			curso.setDescripcionCurso(curso.getDescripcionCurso()+ " No encontrado");
-			return curso;				
+			curso.setDescripcionCurso(curso.getDescripcionCurso() + " No encontrado");
+			return curso;
 		}
 	}
-
 
 	public String deleteCurso(String id) {
 		Optional<Curso> busquedaCurso = repositorio.findById(id);

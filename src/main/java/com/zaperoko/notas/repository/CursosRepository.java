@@ -28,4 +28,7 @@ public interface CursosRepository extends MongoRepository<Curso, String> {
 
 	@Query("{ idProfesorAsignatura: { $in : ['?0'] } }")
 	public Optional<Curso> findByIdProfesorAsignatura(String asignatura);
+	
+	@Query("{alumnoCurso: {$in: ['?0']}, idYear:'?1'}") 
+	public Optional<Curso> findByIdAlumnoCursoAndIdYear(String alumnoCursoId, String idYear);
 }

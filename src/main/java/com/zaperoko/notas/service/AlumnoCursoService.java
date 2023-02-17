@@ -10,7 +10,6 @@ import com.zaperoko.notas.model.AlumnoCurso;
 import com.zaperoko.notas.model.Curso;
 import com.zaperoko.notas.repository.AlumnoCursoRepository;
 import com.zaperoko.notas.repository.CursosRepository;
-import com.zaperoko.notas.repository.EstudianteRepository;
 
 @Service
 public class AlumnoCursoService {
@@ -51,6 +50,10 @@ public class AlumnoCursoService {
 	
 	public List<AlumnoCurso> getAlumnoCursosByAlumno(String idAlumno) {
 		return repositorio.findByIdEstudiante(idAlumno);
+	}
+	
+	public Optional<AlumnoCurso> getAlumnoCursosByAlumnoAndCurso(String curso, String idAlumno) {
+		return repositorio.findAlumnoCurso(curso, idAlumno);
 	}
 
 	public AlumnoCurso updateAlumnoCurso(AlumnoCurso actualizacion) {

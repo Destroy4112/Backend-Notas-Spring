@@ -47,7 +47,7 @@ public class CursosController {
     public ResponseEntity<?> consultarCursoPorDescripcion(@PathVariable String descripcion) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursoByDescripcion(descripcion));
     }
-    
+
     @GetMapping("/grado/{grado}")
     public ResponseEntity<?> consultarCursoPorGrado(@PathVariable String grado) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursosByGrado(grado));
@@ -56,6 +56,21 @@ public class CursosController {
     @GetMapping("/asignatura/{asignatura}")
     public ResponseEntity<?> consultarCursoPorAsignatura(@PathVariable String asignatura) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursosByAsignatura(asignatura));
+    }
+
+    @GetMapping("/alumnoCurso/{alumnoCursoId}/{idYear}")
+    public ResponseEntity<?> consultarCursoPorAlumnoCurso(@PathVariable String alumnoCursoId, @PathVariable String idYear) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursoByIdAlumnoCursoAndYear(alumnoCursoId, idYear));
+    }
+
+    @GetMapping("/year/{idYear}")
+    public ResponseEntity<?> consultarCursoYear(@PathVariable String idYear) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursoByIdYear(idYear));
+    }
+
+    @GetMapping("/alumnoCursos/{alumnoCursoId}")
+    public ResponseEntity<?> consultarCursoPorAlumnoCurso(@PathVariable String alumnoCursoId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursosByIdAlumnoCurso(alumnoCursoId));
     }
 
     @PutMapping

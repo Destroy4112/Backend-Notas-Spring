@@ -44,6 +44,11 @@ public class YearController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getYearsById(id));
     }
 
+    @GetMapping("/descripcionYear/{descripcion}")
+    public ResponseEntity<?> consultarYearPorDescripcion(@PathVariable String descripcion) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getYearByDescripcion(descripcion));
+    }
+
     @PutMapping
     public ResponseEntity<?> actualizarYear(@RequestBody Year year) {
         Year resultado = servicio.updateYears(year);

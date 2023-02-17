@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.zaperoko.notas.model.Curso;
@@ -29,6 +30,13 @@ public interface CursosRepository extends MongoRepository<Curso, String> {
 	@Query("{ idProfesorAsignatura: { $in : ['?0'] } }")
 	public Optional<Curso> findByIdProfesorAsignatura(String asignatura);
 
-	@Query("{ idAlumnoCurso: { $in : ['?0'] } }")
+	//@Query("{ idAlumnoCurso: { $in : ['?0'] } }")
+	//public Optional<Curso> findByIdAlumnoCurso(String alumnoCursoId);
+	
+	@Query("{alumnoCurso: {$in: ['?0']}, idYear:'?1'}")
+	public Optional<Curso> findByIdAlumnoCursoAndIdYear(String alumnoCursoId, String idYear);
+
+	@Query("{alumnoCurso: {$in: ['?0']} }")
 	public Optional<Curso> findByIdAlumnoCurso(String alumnoCursoId);
+	
 }

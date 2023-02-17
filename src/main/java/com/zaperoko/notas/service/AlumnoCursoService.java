@@ -22,21 +22,22 @@ public class AlumnoCursoService {
 	@Autowired
 	private EstudianteRepository repositorioAlumno;
 
-	public AlumnoCurso addAlumnoCurso(AlumnoCurso detalle) {
-		Optional<AlumnoCurso> registroEncontrado = repositorio.findAlumnoCurso(detalle.getIdCurso(),
-				detalle.getIdEstudiante());
+	public AlumnoCurso addAlumnoCurso(AlumnoCurso alumnoCurso) {
+		System.out.println(alumnoCurso);
+		Optional<AlumnoCurso> registroEncontrado = repositorio.findAlumnoCurso(alumnoCurso.getIdCurso(), alumnoCurso.getIdEstudiante());
 		if (registroEncontrado.isPresent()) {
 			registroEncontrado.get().setIdCurso(registroEncontrado.get().getIdCurso() + " registrado");
 			return registroEncontrado.get();
 		}
-		List<AlumnoCurso> estudianteCursoEncontrado = repositorio.findByIdEstudiante(detalle.getIdEstudiante());
-		Optional<Curso> curso = repositorioCurso.findById(detalle.getIdCurso());
+		List<AlumnoCurso> estudianteCursoEncontrado = repositorio.findByIdEstudiante(alumnoCurso.getIdEstudiante());
+		System.out.println(estudianteCursoEncontrado);
+		Optional<Curso> curso = repositorioCurso.findById(alumnoCurso.getIdCurso());
 		if (curso.isPresent()) {
-			if (estudianteCursoEncontrado.size()==1 && estudianteCursoEncontrado.get(0).getIdCurso()==null) {
-				estudianteCursoEncontrado.get(0).setIdCurso(detalle.getIdCurso());
+			if (estudianteCursoEncontrado.size()==1 && estudianteCursoEncontrado.get(0).getIdCurso()=="") {
+				estudianteCursoEncontrado.get(0).setIdCurso(alumnoCurso.getIdCurso());
 				return repositorio.save(estudianteCursoEncontrado.get(0));
 			} else {
-				return repositorio.save(detalle);
+				return repositorio.save(alumnoCurso);
 			}
 		}
 		return null;
@@ -58,5 +59,8 @@ public class AlumnoCursoService {
 		return null;
 	}
 
+	public Optional<AlumnoCurso> getAlumnoCursosByAlumnoAndCurso(String curso, String idAlumno) {
+		return repositorio.findAlumnoCurso(curso, idAlumno);
+	}
 
 }

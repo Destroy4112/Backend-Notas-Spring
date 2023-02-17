@@ -60,9 +60,5 @@ public class AlumnoCursoService {
 	public AlumnoCurso updateAlumnoCurso(AlumnoCurso actualizacion) {
 		return null;
 	}
-
-	public Optional<AlumnoCurso> getAlumnoCursosByAlumnoAndCurso(String curso, String idAlumno) {
-		return repositorio.findAlumnoCurso(curso, idAlumno);
-	}
-
+	
 }

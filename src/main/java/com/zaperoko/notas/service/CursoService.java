@@ -94,12 +94,8 @@ public class CursoService {
 						yearRepositorio.findById(cursoEncontrado.get().getIdYear()).get().getDescripcionYear());
 			}
 		}
-
+		
 		return cursoEncontrado;
-	}
-
-	public Optional<Curso> getCursoByIdAlumnoCursoAndYear(String alumnoCursoId, String idYear) {
-		return repositorio.findByIdAlumnoCursoAndIdYear(alumnoCursoId, idYear);
 	}
 
 	public List<Curso> getCursos() {
@@ -129,9 +125,21 @@ public class CursoService {
 	public List<Curso> getCursosByGrado(String grado) {
 		return repositorio.findByIdGrado(grado);
 	}
+	
+	public Optional<Curso> getCursosByAsignatura(String asignatura) {
+		return repositorio.findByIdProfesorAsignatura(asignatura);
+	}
+	
+	public Optional<Curso> getCursoByIdAlumnoCursoAndYear(String alumnoCursoId, String idYear) {
+		return repositorio.findByIdAlumnoCursoAndIdYear(alumnoCursoId, idYear);
+	}
 
-	public Optional<Curso> getCursosByAsignatura(String grado) {
-		return repositorio.findByIdProfesorAsignatura(grado);
+	public List<Curso> getCursoByIdYear(String idYear) {
+		return repositorio.findByIdYear(idYear);
+	}
+
+	public Optional<Curso> getCursosByIdAlumnoCurso(String alumnoCursoId) {
+		return repositorio.findByIdAlumnoCurso(alumnoCursoId);
 	}
 
 	public Curso updateCurso(Curso curso) {

@@ -38,6 +38,7 @@ public class CursosController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursos());
 	}
 
+<<<<<<< HEAD
 	@GetMapping("/{id}")
 	public ResponseEntity<?> consultarCursoPorId(@PathVariable String id) {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursosById(id));
@@ -47,6 +48,51 @@ public class CursosController {
 	public ResponseEntity<?> consultarCursoPorDescripcion(@PathVariable String descripcion) {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursoByDescripcion(descripcion));
 	}
+=======
+    @GetMapping("/{id}")
+    public ResponseEntity<?> consultarCursoPorId(@PathVariable String id) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursosById(id));
+    }
+    
+    @GetMapping("/descripcion/{descripcion}")
+    public ResponseEntity<?> consultarCursoPorDescripcion(@PathVariable String descripcion) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursoByDescripcion(descripcion));
+    }
+
+    @GetMapping("/grado/{grado}")
+    public ResponseEntity<?> consultarCursoPorGrado(@PathVariable String grado) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursosByGrado(grado));
+    }
+    
+    @GetMapping("/asignatura/{asignatura}")
+    public ResponseEntity<?> consultarCursoPorAsignatura(@PathVariable String asignatura) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursosByAsignatura(asignatura));
+    }
+
+    @GetMapping("/alumnoCurso/{alumnoCursoId}/{idYear}")
+    public ResponseEntity<?> consultarCursoPorAlumnoCurso(@PathVariable String alumnoCursoId, @PathVariable String idYear) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursoByIdAlumnoCursoAndYear(alumnoCursoId, idYear));
+    }
+
+    @GetMapping("/year/{idYear}")
+    public ResponseEntity<?> consultarCursoYear(@PathVariable String idYear) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursoByIdYear(idYear));
+    }
+
+    @GetMapping("/alumnoCursos/{alumnoCursoId}")
+    public ResponseEntity<?> consultarCursoPorAlumnoCurso(@PathVariable String alumnoCursoId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursosByIdAlumnoCurso(alumnoCursoId));
+    }
+
+    @PutMapping
+    public ResponseEntity<?> actualizarCurso(@RequestBody Curso curso) {
+        Curso resultado = servicio.updateCurso(curso);
+        if (resultado == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Algo salío mal");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+    }
+>>>>>>> c84f5bc7515b35517ea4c85ef5ac6bc4bb0d0d34
 
 	@GetMapping("/grado/{grado}")
 	public ResponseEntity<?> consultarCursoPorGrado(@PathVariable String grado) {

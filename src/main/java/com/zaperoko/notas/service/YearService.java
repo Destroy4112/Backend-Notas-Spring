@@ -43,6 +43,10 @@ public class YearService {
 		return repositorio.findById(id);
 	}
 
+	public Optional<Year> getYearByDescripcion(String descripcion) {
+		return repositorio.findBydescripcionYear(descripcion);
+	}
+
 	public Year updateYears(Year year) {
 		Optional<Year> resultado = repositorio.findBydescripcionYear(year.getDescripcionYear());
 		if (resultado.isPresent()) {

@@ -23,10 +23,22 @@ public class AlumnoCursoController {
     private AlumnoCursoService servicio;
 
     @PostMapping
+<<<<<<< HEAD
     public ResponseEntity<?> agregarAlumnoCursos(@RequestBody AlumnoCurso detalle) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.addAlumnoCurso(detalle));
     }
     
+=======
+    public ResponseEntity<?> crearAlumnoCurso(@RequestBody AlumnoCurso alumnoCurso) {
+        //ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.addAlumnoCurso(alumnoCurso));
+        AlumnoCurso resultado = servicio.addAlumnoCurso(alumnoCurso);
+        if (resultado == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Algo salío mal");
+        }
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(resultado);
+    }
+
+>>>>>>> c84f5bc7515b35517ea4c85ef5ac6bc4bb0d0d34
     @GetMapping
     public ResponseEntity<?> consultarAlumnoCursos() {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getAlumnoCursos());
@@ -42,6 +54,11 @@ public class AlumnoCursoController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getAlumnoCursosByAlumno(id));
     }
     
+    @GetMapping("/alumno_asignatura/{curso}/{estudiante}")
+    public ResponseEntity<?> consultarAlumnoCursoPorCursoyEstudiante(@PathVariable String curso, @PathVariable String estudiante) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getAlumnoCursosByAlumnoAndCurso(curso, estudiante));
+    }
+
     @GetMapping("/alumno_asignatura/{curso}/{estudiante}")
     public ResponseEntity<?> consultarAlumnoCursoPorCursoyEstudiante(@PathVariable String curso, @PathVariable String estudiante) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getAlumnoCursosByAlumnoAndCurso(curso, estudiante));

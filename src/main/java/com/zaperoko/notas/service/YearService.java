@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zaperoko.notas.model.Asignatura;
 import com.zaperoko.notas.model.Curso;
 import com.zaperoko.notas.model.Year;
 import com.zaperoko.notas.repository.CursosRepository;

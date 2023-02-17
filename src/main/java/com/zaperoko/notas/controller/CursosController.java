@@ -38,15 +38,15 @@ public class CursosController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursos());
 	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> consultarCursoPorId(@PathVariable String id) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursosById(id));
-    }
-    
-    @GetMapping("/descripcion/{descripcion}")
-    public ResponseEntity<?> consultarCursoPorDescripcion(@PathVariable String descripcion) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursoByDescripcion(descripcion));
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<?> consultarCursoPorId(@PathVariable String id) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursosById(id));
+	}
+
+	@GetMapping("/descripcion/{descripcion}")
+	public ResponseEntity<?> consultarCursoPorDescripcion(@PathVariable String descripcion) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getCursoByDescripcion(descripcion));
+	}
 
     @GetMapping("/grado/{grado}")
     public ResponseEntity<?> consultarCursoPorGrado(@PathVariable String grado) {

@@ -1,6 +1,7 @@
 package com.zaperoko.notas.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -14,6 +15,6 @@ public interface NotaRepository extends MongoRepository<Nota, String> {
 	public List<Nota> findByIdAlumnoCurso(String idAlumnoCurso);
 	
 	@Query("{idAlumnoCurso:'?0', idAsignatura:'?1'}")
-    public List<Nota> findByAlumnoAndAsignatura(String alumnoCurso, String asignatura);
+    public Optional<Nota> findByAlumnoAndAsignatura(String alumnoCurso, String asignatura);
 
 } 

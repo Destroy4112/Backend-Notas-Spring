@@ -8,13 +8,19 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zaperoko.notas.model.AlumnoCurso;
 import com.zaperoko.notas.model.Curso;
 import com.zaperoko.notas.model.Grado;
 import com.zaperoko.notas.model.Grupo;
+import com.zaperoko.notas.model.Nota;
+import com.zaperoko.notas.model.ProfesorAsignatura;
 import com.zaperoko.notas.model.Year;
+import com.zaperoko.notas.repository.AlumnoCursoRepository;
 import com.zaperoko.notas.repository.CursosRepository;
 import com.zaperoko.notas.repository.GradoRepository;
 import com.zaperoko.notas.repository.GruposRepository;
+import com.zaperoko.notas.repository.NotaRepository;
+import com.zaperoko.notas.repository.ProfesorAsignaturaRepository;
 import com.zaperoko.notas.repository.YearRepository;
 
 @Service
@@ -28,30 +34,28 @@ public class CursoService {
 	private GradoRepository gradoRepositorio;
 	@Autowired
 	private YearRepository yearRepositorio;
+	@Autowired
+	private ProfesorAsignaturaRepository profesorAsignaturaRepositorio;
+	@Autowired
+	private AlumnoCursoRepository alumnoCursoRepositorio;
+	@Autowired
+	private NotaRepository notaRepositorio;
 
 	public Curso addCurso(Curso curso) {
+		Optional<Curso> validacion = repositorio.buscarCurso(curso.getIdGrado(), curso.getIdGrupo(), curso.getIdYear(),
+				curso.getDescripcionCurso());
 
-		Optional<Curso> validacion = repositorio.buscarCurso(curso.getIdGrado(), curso.getIdGrupo(), curso.getIdYear());
 		if (validacion.isPresent()) {
 			validacion.get().setDescripcionGrado("registrado");
 			return validacion.get();
 		}
-		Optional<Grupo> grupoEncontrado = grupoRepositorio.findById(curso.getIdGrupo());
+
 		Optional<Grado> gradoExiste = gradoRepositorio.findById(curso.getIdGrado());
+		Optional<Grupo> grupoEncontrado = grupoRepositorio.findById(curso.getIdGrupo());
 		Optional<Year> yearEncontrado = yearRepositorio.findById(curso.getIdYear());
 
 		if (gradoExiste.isPresent() && yearEncontrado.isPresent() && grupoEncontrado.isPresent()) {
 			Curso cursoCreado = repositorio.insert(curso);
-
-			ArrayList<String> listGrupo = new ArrayList<String>();
-			if (grupoEncontrado.get().getCursoId().size() > 0) {
-				listGrupo.addAll(grupoEncontrado.get().getCursoId());
-				listGrupo.add(cursoCreado.getIdCurso());
-			} else {
-				listGrupo.add(cursoCreado.getIdCurso());
-			}
-			grupoEncontrado.get().setCursoId(listGrupo);
-			grupoRepositorio.save(grupoEncontrado.get());
 
 			ArrayList<String> listGrado = new ArrayList<String>();
 			if (gradoExiste.get().getCursoId().size() > 0) {
@@ -63,9 +67,19 @@ public class CursoService {
 			gradoExiste.get().setCursoId(listGrado);
 			gradoRepositorio.save(gradoExiste.get());
 
+			ArrayList<String> listGrupo = new ArrayList<String>();
+			if (grupoEncontrado.get().getCursoId().size() > 0) {
+				listGrupo.addAll(grupoEncontrado.get().getCursoId());
+				listGrupo.add(cursoCreado.getIdCurso());
+			} else {
+				listGrupo.add(cursoCreado.getIdCurso());
+			}
+			grupoEncontrado.get().setCursoId(listGrupo);
+			grupoRepositorio.save(grupoEncontrado.get());
+
 			ArrayList<String> listYear = new ArrayList<String>();
-			if (gradoExiste.get().getCursoId().size() > 0) {
-				listYear.addAll(gradoExiste.get().getCursoId());
+			if (yearEncontrado.get().getCurso().size() > 0) {
+				listYear.addAll(yearEncontrado.get().getCurso());
 				listYear.add(cursoCreado.getIdCurso());
 			} else {
 				listYear.add(cursoCreado.getIdCurso());
@@ -78,24 +92,27 @@ public class CursoService {
 		return null;
 	}
 
-	public Optional<Curso> getCursoByDescripcion(String descripcion) {
-		Optional<Curso> cursoEncontrado = repositorio.findByDescripcionCurso(descripcion);
-		if (cursoEncontrado.isPresent()) {
-			if (!cursoEncontrado.get().getIdGrado().equals("")) {
-				cursoEncontrado.get().setDescripcionGrado(
-						gradoRepositorio.findById(cursoEncontrado.get().getIdGrado()).get().getDescripcionGrado());
+	public List<Curso> getCursoByDescripcion(String descripcion) {
+		List<Curso> cursosEncontrados = repositorio.findByDescripcionCurso(descripcion);
+		if (cursosEncontrados.size() > 0) {
+			for (int i = 0; i < cursosEncontrados.size(); i++) {
+				if (!cursosEncontrados.get(i).getIdGrado().equals("")) {
+					cursosEncontrados.get(i).setDescripcionGrado(gradoRepositorio
+							.findById(cursosEncontrados.get(i).getIdGrado()).get().getDescripcionGrado());
+				}
+				if (!cursosEncontrados.get(i).getIdGrupo().equals("")) {
+					cursosEncontrados.get(i).setDescripcionGrupo(
+							grupoRepositorio.findById(cursosEncontrados.get(i).getIdGrupo()).get().getNombreGrupo());
+				}
+				if (!cursosEncontrados.get(i).getIdYear().equals("")) {
+					cursosEncontrados.get(i).setDescripcionYear(
+							yearRepositorio.findById(cursosEncontrados.get(i).getIdYear()).get().getDescripcionYear());
+				}
 			}
-			if (!cursoEncontrado.get().getIdGrupo().equals("")) {
-				cursoEncontrado.get().setDescripcionGrupo(
-						grupoRepositorio.findById(cursoEncontrado.get().getIdGrupo()).get().getNombreGrupo());
-			}
-			if (!cursoEncontrado.get().getIdYear().equals("")) {
-				cursoEncontrado.get().setDescripcionYear(
-						yearRepositorio.findById(cursoEncontrado.get().getIdYear()).get().getDescripcionYear());
-			}
+			return cursosEncontrados;
+		} else {
+			return null;
 		}
-		
-		return cursoEncontrado;
 	}
 
 	public List<Curso> getCursos() {
@@ -114,7 +131,8 @@ public class CursoService {
 						yearRepositorio.findById(cursos.get(i).getIdYear()).get().getDescripcionYear());
 			}
 		}
-		cursos.sort(Comparator.comparing(Curso::getDescripcionCurso));
+		cursos.sort(
+				Comparator.comparing(Curso::getIdYear).thenComparing(Comparator.comparing(Curso::getDescripcionCurso)));
 		return cursos;
 	}
 
@@ -125,11 +143,11 @@ public class CursoService {
 	public List<Curso> getCursosByGrado(String grado) {
 		return repositorio.findByIdGrado(grado);
 	}
-	
+
 	public Optional<Curso> getCursosByAsignatura(String asignatura) {
 		return repositorio.findByIdProfesorAsignatura(asignatura);
 	}
-	
+
 	public Optional<Curso> getCursoByIdAlumnoCursoAndYear(String alumnoCursoId, String idYear) {
 		return repositorio.findByIdAlumnoCursoAndIdYear(alumnoCursoId, idYear);
 	}
@@ -143,21 +161,25 @@ public class CursoService {
 	}
 
 	public Curso updateCurso(Curso curso) {
-		Optional<Curso> busquedaCurso = repositorio.findByDescripcionCurso(curso.getDescripcionCurso());
-		if (busquedaCurso.isPresent()) {
-			if (busquedaCurso.get().getIdCurso().equals(curso.getIdCurso())) {
-				return repositorio.save(curso);
-			} else {
-				if (busquedaCurso.get().getIdYear().equals(curso.getIdYear())) {
-					busquedaCurso.get().setDescripcionCurso(busquedaCurso.get().getDescripcionCurso() + " registrado");
-					return busquedaCurso.get();
+		List<Curso> busquedaCursos = repositorio.findByDescripcionCurso(curso.getDescripcionCurso());
+		Curso cursoRevisado = new Curso();
+		if (busquedaCursos.size()>0) {
+			for (int i=0; i<busquedaCursos.size(); i++) {
+				if (busquedaCursos.get(i).getIdCurso().equals(curso.getIdCurso())) {
+					cursoRevisado=curso;
 				} else {
-					return repositorio.save(curso);
+					if (busquedaCursos.get(i).getIdYear().equals(curso.getIdYear())) {
+						busquedaCursos.get(i).setDescripcionCurso(busquedaCursos.get(i).getDescripcionCurso() + " registrado");
+						return busquedaCursos.get(i);
+					} else {
+						cursoRevisado=curso;
+					}
 				}
 			}
+			return repositorio.save(cursoRevisado);
 		} else {
-			Optional<Curso> cursobyId = repositorio.findById(curso.getIdCurso());
-			if (cursobyId.isPresent()) {
+			Optional<Curso> cursoById = repositorio.findById(curso.getIdCurso());
+			if (cursoById.isPresent()) {
 				return repositorio.save(curso);
 			}
 			curso.setDescripcionCurso(curso.getDescripcionCurso() + " No encontrado");
@@ -194,6 +216,24 @@ public class CursoService {
 					}
 				}
 				yearRepositorio.save(cursoEnYear.get());
+			}
+			List<ProfesorAsignatura> cursoProfesorAsignatura = profesorAsignaturaRepositorio.findByIdCurso(id);
+			if (cursoProfesorAsignatura.size() > 0) {
+				for (int i = 0; i < cursoProfesorAsignatura.size(); i++) {
+					profesorAsignaturaRepositorio.delete(cursoProfesorAsignatura.get(i));
+				}
+			}
+			List<AlumnoCurso> cursoAlumnoCurso = alumnoCursoRepositorio.findByIdCurso(id);
+			if (cursoAlumnoCurso.size() > 0) {
+				for (int i = 0; i < cursoAlumnoCurso.size(); i++) {
+					List<Nota> nota = notaRepositorio.findByIdAlumnoCurso(cursoAlumnoCurso.get(i).getId());
+					if (nota.size() > 0) {
+						for (int j = 0; j < nota.size(); j++) {
+							notaRepositorio.delete(nota.get(j));
+						}
+					}
+					alumnoCursoRepositorio.delete(cursoAlumnoCurso.get(i));
+				}
 			}
 			repositorio.delete(busquedaCurso.get());
 			return "Eliminado Correctamente";

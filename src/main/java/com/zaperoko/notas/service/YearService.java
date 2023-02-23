@@ -47,17 +47,22 @@ public class YearService {
 	}
 
 	public Year updateYears(Year year) {
-		Optional<Year> resultado = repositorio.findBydescripcionYear(year.getDescripcionYear());
-		if (resultado.isPresent()) {
-			String anio = resultado.get().getDescripcionYear() + " Registrado";
-			resultado.get().setDescripcionYear(anio);
-			return resultado.get();
-		}
-		Optional<Year> years = repositorio.findById(year.getId());
-		if (years.isPresent()) {
+		Optional<Year> yearEncontrado = repositorio.findById(year.getId());
+		if (yearEncontrado.isPresent()) {
+			Optional<Year> resultado = repositorio.findBydescripcionYear(year.getDescripcionYear());
+			if (resultado.isPresent()) {
+				if (resultado.get().getId().equals(year.getId())) {
+					return repositorio.save(year);
+				} else {
+					String anio = resultado.get().getDescripcionYear() + " Registrado";
+					resultado.get().setDescripcionYear(anio);
+					return resultado.get();
+				}
+			}
 			return repositorio.save(year);
 		}
 		return null;
+
 	}
 
 	public String deleteYear(String id) {

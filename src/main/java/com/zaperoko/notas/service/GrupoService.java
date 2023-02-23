@@ -41,14 +41,21 @@ public class GrupoService {
 	}
 
 	public Grupo actualizarGrupos(Grupo grupo) {
-		Optional<Grupo> grupoEncontrado = repositorio.findByNombreGrupo(grupo.getNombreGrupo());
+		Optional<Grupo> grupoEncontrado = repositorio.findById(grupo.getId());
 		if (grupoEncontrado.isPresent()) {
-			String grupoRegistrado = grupoEncontrado.get().getNombreGrupo() + " Registrado";
-			grupoEncontrado.get().setNombreGrupo(grupoRegistrado);
-			return grupoEncontrado.get();
-		} else {
+			Optional<Grupo> resultado = repositorio.findByNombreGrupo(grupo.getNombreGrupo());
+			if (resultado.isPresent()) {
+				if (resultado.get().getId().equals(grupo.getId())) {
+					return repositorio.save(grupo);
+				} else {
+					String grupoRegistrado = resultado.get().getNombreGrupo() + " Registrado";
+					resultado.get().setNombreGrupo(grupoRegistrado);
+					return resultado.get();
+				}
+			}
 			return repositorio.save(grupo);
 		}
+		return null;
 	}
 
 	public String deleteGrupo(String id) {

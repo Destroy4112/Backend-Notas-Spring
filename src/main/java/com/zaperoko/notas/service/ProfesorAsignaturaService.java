@@ -14,11 +14,21 @@ public class ProfesorAsignaturaService {
 
 	@Autowired
 	private ProfesorAsignaturaRepository repositorio;
-	
+
 	public ProfesorAsignatura addProfesorAsignatura(ProfesorAsignatura profesorAsignatura) {
+		Optional<ProfesorAsignatura> profAsigEncontrado = repositorio
+				.findProfesorAsignatura(profesorAsignatura.getProfesorId(), profesorAsignatura.getAsignaturaId());
+		if (profAsigEncontrado.isPresent()) {
+			profAsigEncontrado.get().setIdCurso("Registrado");
+			return profAsigEncontrado.get();
+		}
 		return repositorio.insert(profesorAsignatura);
 	}
 	
+	public Optional<ProfesorAsignatura> getById(String id) {
+		return repositorio.findById(id);
+	}
+
 	public List<ProfesorAsignatura> getProfesoresAsignatura() {
 		return repositorio.findAll();
 	}
@@ -26,13 +36,13 @@ public class ProfesorAsignaturaService {
 	public List<ProfesorAsignatura> getByAsignatura(String asignatura) {
 		return repositorio.findByAsignaturaId(asignatura);
 	}
-	
+
 	public List<ProfesorAsignatura> getByProfesor(String profesor) {
 		return repositorio.findByProfesorId(profesor);
 	}
-	
-	public Optional<ProfesorAsignatura> getById(String id) {
-		return repositorio.findById(id);
+
+	public Optional<ProfesorAsignatura> getProfesorAsignaturaByProfesorAndAsignatura(String profesorId, String asignaturaId) {
+		return repositorio.findProfesorAsignatura(profesorId, asignaturaId);
 	}
 	
 	public ProfesorAsignatura actualizarProfesorAsignatura(ProfesorAsignatura profesorAsignatura) {

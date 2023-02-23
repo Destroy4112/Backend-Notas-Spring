@@ -10,11 +10,15 @@ import org.springframework.stereotype.Service;
 
 import com.zaperoko.notas.model.Acudiente;
 import com.zaperoko.notas.model.AlumnoCurso;
+import com.zaperoko.notas.model.Curso;
 import com.zaperoko.notas.model.Estudiante;
+import com.zaperoko.notas.model.Nota;
 import com.zaperoko.notas.model.Usuario;
 import com.zaperoko.notas.repository.AcudienteRepository;
 import com.zaperoko.notas.repository.AlumnoCursoRepository;
+import com.zaperoko.notas.repository.CursosRepository;
 import com.zaperoko.notas.repository.EstudianteRepository;
+import com.zaperoko.notas.repository.NotaRepository;
 import com.zaperoko.notas.repository.UsuariosRepository;
 
 @Service
@@ -28,6 +32,10 @@ public class EstudianteService {
 	private AlumnoCursoRepository repoAlumnoCurso;
 	@Autowired
 	private AcudienteRepository repoAcudiente;
+	@Autowired
+	private NotaRepository repoNotas;
+	@Autowired
+	private CursosRepository repoCursos;
 
 	public Estudiante addEstudiante(Estudiante estudiante) {
 		Optional<Usuario> estudianteDocumento = repoUser.findByUsuario(estudiante.getNumeroDocumento());
@@ -54,11 +62,11 @@ public class EstudianteService {
 
 	public List<Estudiante> getEstudiantes() {
 		List<Estudiante> estudiante = repositorio.findAll();
-		
+
 		for (int i = 0; i < estudiante.size(); i++) {
-			if (!estudiante.get(i).getIdAcudiente().equals("")){			
-				estudiante.get(i)
-					.setNombreAcudiente(repoAcudiente.findById(estudiante.get(i).getIdAcudiente()).get().getNombres());
+			if (!estudiante.get(i).getIdAcudiente().equals("")) {
+				estudiante.get(i).setNombreAcudiente(
+						repoAcudiente.findById(estudiante.get(i).getIdAcudiente()).get().getNombres());
 			}
 		}
 		estudiante.sort(Comparator.comparing(Estudiante::getNombres));
@@ -80,9 +88,9 @@ public class EstudianteService {
 
 	public Optional<Estudiante> getEstudianteById(String id) {
 		Optional<Estudiante> estudiante = repositorio.findById(id);
-		if (!estudiante.get().getIdAcudiente().equals("")){
- 			estudiante.get()
-				.setNombreAcudiente(repoAcudiente.findById(estudiante.get().getIdAcudiente()).get().getNombres());
+		if (!estudiante.get().getIdAcudiente().equals("")) {
+			estudiante.get()
+					.setNombreAcudiente(repoAcudiente.findById(estudiante.get().getIdAcudiente()).get().getNombres());
 		}
 		return estudiante;
 	}
@@ -121,35 +129,54 @@ public class EstudianteService {
 	}
 
 	public String deleteEstudiante(String id) {
-
 		Optional<Estudiante> estudiante = repositorio.findById(id);
 		if (estudiante.isPresent()) {
+
 			Optional<Usuario> busquedaEstudiante = repoUser.findByUsuario(estudiante.get().getNumeroDocumento());
 			if (busquedaEstudiante.isPresent()) {
 				repoUser.delete(busquedaEstudiante.get());
 			}
-			Optional<Acudiente> buscarPorAcudiente = repoAcudiente.findByEstudiante(estudiante.get().getId());
-			if (buscarPorAcudiente.isPresent()) {
+
+			Optional<Acudiente> busquedaEnAcudiente = repoAcudiente.findByEstudiante(estudiante.get().getId());
+			if (busquedaEnAcudiente.isPresent()) {
 				List<String> listEstudiante = new ArrayList<>();
-				listEstudiante.addAll(buscarPorAcudiente.get().getIdAlumno());
+				listEstudiante.addAll(busquedaEnAcudiente.get().getIdAlumno());
 				for (int i = 0; i < listEstudiante.size(); i++) {
 					if (listEstudiante.get(i).equals(id)) {
 						listEstudiante.remove(i);
 					}
-					buscarPorAcudiente.get().setIdAlumno(listEstudiante);
-					repoAcudiente.save(buscarPorAcudiente.get());
+					busquedaEnAcudiente.get().setIdAlumno(listEstudiante);
+					repoAcudiente.save(busquedaEnAcudiente.get());
 				}
-				List<AlumnoCurso> buscarEstudiantes = repoAlumnoCurso.findByIdEstudiante(estudiante.get().getId());
-				if (buscarEstudiantes.size() > 0) {
-					for (int i = 0; i < buscarEstudiantes.size(); i++) {
-						repoAlumnoCurso.delete(buscarEstudiantes.get(i));
-					}
-				}
-				repositorio.delete(estudiante.get());
-				return "Eliminado Correctamente";
 			}
-			return "No existe existe un acudiente relacionado a este estudiante";
+			List<AlumnoCurso> buscarEstudiantes = repoAlumnoCurso.findByIdEstudiante(estudiante.get().getId());
+			if (buscarEstudiantes.size() > 0) {
+				for (int i = 0; i < buscarEstudiantes.size(); i++) {
+					List<Nota> nota = repoNotas.findByIdAlumnoCurso(buscarEstudiantes.get(i).getId());
+					if (nota.size() > 0) {
+						for (int j = 0; j < nota.size(); j++) {
+							repoNotas.delete(nota.get(j));
+						}
+					}
+					Optional<Curso> cursos = repoCursos.findByIdAlumnoCurso(buscarEstudiantes.get(i).getId());
+					if (cursos.isPresent()) {
+						List<String> listAlumnoCurso = new ArrayList<>();
+						listAlumnoCurso.addAll(cursos.get().getAlumnoCurso());
+						for (int k = 0; k < listAlumnoCurso.size(); k++) {
+							if (listAlumnoCurso.get(k).equals(buscarEstudiantes.get(i).getId())) {
+								listAlumnoCurso.remove(k);
+							}
+							cursos.get().setAlumnoCurso(listAlumnoCurso);
+							repoCursos.save(cursos.get());
+							listAlumnoCurso.clear();
+						}
+					}
+					repoAlumnoCurso.delete(buscarEstudiantes.get(i));
+				}
+			}
+			repositorio.delete(estudiante.get());
+			return "Eliminado Correctamente";
 		}
-		return "No existe ningun estudiante con ese id";
+		return "Estudiante no encontrado";
 	}
 }

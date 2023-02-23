@@ -21,17 +21,16 @@ public class AlumnoCursoService {
 
 
 	public AlumnoCurso addAlumnoCurso(AlumnoCurso alumnoCurso) {
-		System.out.println(alumnoCurso);
+		System.out.println("alumnoCurso: "+alumnoCurso);
 		Optional<AlumnoCurso> registroEncontrado = repositorio.findAlumnoCurso(alumnoCurso.getIdCurso(), alumnoCurso.getIdEstudiante());
 		if (registroEncontrado.isPresent()) {
 			registroEncontrado.get().setIdCurso(registroEncontrado.get().getIdCurso() + " registrado");
 			return registroEncontrado.get();
 		}
 		List<AlumnoCurso> estudianteCursoEncontrado = repositorio.findByIdEstudiante(alumnoCurso.getIdEstudiante());
-		System.out.println(estudianteCursoEncontrado);
 		Optional<Curso> curso = repositorioCurso.findById(alumnoCurso.getIdCurso());
 		if (curso.isPresent()) {
-			if (estudianteCursoEncontrado.size()==1 && estudianteCursoEncontrado.get(0).getIdCurso()=="") {
+			if (estudianteCursoEncontrado.size()==1 && estudianteCursoEncontrado.get(0).getIdCurso().equals("")) {
 				estudianteCursoEncontrado.get(0).setIdCurso(alumnoCurso.getIdCurso());
 				return repositorio.save(estudianteCursoEncontrado.get(0));
 			} else {
@@ -60,5 +59,5 @@ public class AlumnoCursoService {
 	public AlumnoCurso updateAlumnoCurso(AlumnoCurso actualizacion) {
 		return null;
 	}
-	
+
 }

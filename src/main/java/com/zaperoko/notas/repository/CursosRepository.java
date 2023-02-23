@@ -12,7 +12,10 @@ import com.zaperoko.notas.model.Curso;
 @Repository
 public interface CursosRepository extends MongoRepository<Curso, String> {
 
-	public Optional<Curso> findByDescripcionCurso(String descripcionCurso);
+	public List<Curso> findByDescripcionCurso(String descripcionCurso);
+
+	@Query("{idGrado:'?0', idGrupo:'?1', idYear:'?2', descripcionCurso:'?3' }")
+	public Optional<Curso> buscarCurso(String idGrado, String idGrupo, String idYear, String descripcionCurso);
 	
 	@Query("{idGrado:'?0', idGrupo:'?1', idYear:'?2'}")
 	public Optional<Curso> buscarCurso(String grado, String grupo, String year);
@@ -28,7 +31,6 @@ public interface CursosRepository extends MongoRepository<Curso, String> {
 
 	@Query("{ idProfesorAsignatura: { $in : ['?0'] } }")
 	public Optional<Curso> findByIdProfesorAsignatura(String asignatura);
-
 	
 	@Query("{alumnoCurso: {$in: ['?0']}, idYear:'?1'}")
 	public Optional<Curso> findByIdAlumnoCursoAndIdYear(String alumnoCursoId, String idYear);

@@ -18,53 +18,59 @@ import com.zaperoko.notas.service.ProfesorAsignaturaService;
 
 @RestController
 @RequestMapping("/api/profesores_asignaturas")
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class ProfesorAsignaturaController {
 
-    @Autowired
-    private ProfesorAsignaturaService servicio;
+	@Autowired
+	private ProfesorAsignaturaService servicio;
 
-    @PostMapping
-    public ResponseEntity<?> agregarProfesorAsignatura(@RequestBody ProfesorAsignatura profesorAsignatura) {
-        ProfesorAsignatura resultado = servicio.addProfesorAsignatura(profesorAsignatura);
-        if (resultado == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Algo salío mal");
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
-    }
+	@PostMapping
+	public ResponseEntity<?> agregarProfesorAsignatura(@RequestBody ProfesorAsignatura profesorAsignatura) {
+		ProfesorAsignatura resultado = servicio.addProfesorAsignatura(profesorAsignatura);
+		if (resultado == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Algo salío mal");
+		}
+		return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+	}
 
-    @GetMapping
-    public ResponseEntity<?> consultarProfesoresAsignatura() {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getProfesoresAsignatura());
-    }
-    
-    @GetMapping("/{asignatura}")
-    public ResponseEntity<?> consultarPorProfesor(@PathVariable String asignatura) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getByAsignatura(asignatura));
-    }
-    
-    @GetMapping("/id/{id}")
-    public ResponseEntity<?> consultarPorId(@PathVariable String id) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getById(id));
-    }
-    
-    @GetMapping("/docente/{profesor}")
-    public ResponseEntity<?> consultarPorDocente(@PathVariable String profesor) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getByProfesor(profesor));
-    }
-    
-    @PutMapping
-    public ResponseEntity<?> actualizarProfesorAsignatura(@RequestBody ProfesorAsignatura profesorAsignatura) {
-        ProfesorAsignatura resultado = servicio.actualizarProfesorAsignatura(profesorAsignatura);
-        if (resultado == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Algo salío mal");
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
-    }
+	@GetMapping
+	public ResponseEntity<?> consultarProfesoresAsignatura() {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getProfesoresAsignatura());
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProfesorAsignatura(@PathVariable String id) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.deleteProfesorAsignatura(id));
-    }
+	@GetMapping("/{asignatura}")
+	public ResponseEntity<?> consultarPorProfesor(@PathVariable String asignatura) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getByAsignatura(asignatura));
+	}
+
+	@GetMapping("/id/{id}")
+	public ResponseEntity<?> consultarPorId(@PathVariable String id) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getById(id));
+	}
+
+	@GetMapping("/docente/{profesor}")
+	public ResponseEntity<?> consultarPorDocente(@PathVariable String profesor) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getByProfesor(profesor));
+	}
+
+	@GetMapping("/profesor_asignatura/{profesorId}/{asignaturaId}")
+	public ResponseEntity<?> consultarPorDocente(@PathVariable String profesorId, @PathVariable String asignaturaId) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED)
+				.body(servicio.getProfesorAsignaturaByProfesorAndAsignatura(profesorId, asignaturaId));
+	}
+
+	@PutMapping
+	public ResponseEntity<?> actualizarProfesorAsignatura(@RequestBody ProfesorAsignatura profesorAsignatura) {
+		ProfesorAsignatura resultado = servicio.actualizarProfesorAsignatura(profesorAsignatura);
+		if (resultado == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Algo salío mal");
+		}
+		return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteProfesorAsignatura(@PathVariable String id) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.deleteProfesorAsignatura(id));
+	}
 
 }

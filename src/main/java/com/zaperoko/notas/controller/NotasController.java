@@ -43,11 +43,11 @@ public class NotasController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(servicio.getNotasByAlumno(id));
 	}
 
-	@GetMapping("/alumno_Asignatura/{alumnoCurso}/{profesorAsignatura}")
+	@GetMapping("/alumno_Asignatura/{alumnoCurso}/{asignatura}")
 	public ResponseEntity<?> cargarNotasPorAlumnoYAsignatura(@PathVariable String alumnoCurso,
-			@PathVariable String profesorAsignatura) {
+			@PathVariable String asignatura) {
 		return ResponseEntity.status(HttpStatus.ACCEPTED)
-				.body(servicio.getNotasByAlumnoAndAsignatura(alumnoCurso, profesorAsignatura));
+				.body(servicio.getNotasByAlumnoAndAsignatura(alumnoCurso, asignatura));
 	}
 
 	@PutMapping

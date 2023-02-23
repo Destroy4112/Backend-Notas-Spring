@@ -32,7 +32,7 @@ public class NotaService {
 		return repositorio.findAll();
 	}
 
-	public List<Nota> getNotasByAlumnoAndAsignatura(String alumnoCurso, String asignatura) {
+	public Optional<Nota> getNotasByAlumnoAndAsignatura(String alumnoCurso, String asignatura) {
 		return repositorio.findByAlumnoAndAsignatura(alumnoCurso, asignatura);
 	}
 

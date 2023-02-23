@@ -56,7 +56,6 @@ public class AcudienteController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
     }
-
     
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAcudientePorId(@PathVariable String id) {

@@ -16,9 +16,6 @@ public interface CursosRepository extends MongoRepository<Curso, String> {
 
 	@Query("{idGrado:'?0', idGrupo:'?1', idYear:'?2', descripcionCurso:'?3' }")
 	public Optional<Curso> buscarCurso(String idGrado, String idGrupo, String idYear, String descripcionCurso);
-	
-	@Query("{idGrado:'?0', idGrupo:'?1', idYear:'?2'}")
-	public Optional<Curso> buscarCurso(String grado, String grupo, String year);
 
 	@Query("{ descripcionCurso:?0, idYear:'?1' }")
 	public Optional<Curso> findCursoByDescripcion(String descripcionCurso, String idYear);
@@ -31,11 +28,11 @@ public interface CursosRepository extends MongoRepository<Curso, String> {
 
 	@Query("{ idProfesorAsignatura: { $in : ['?0'] } }")
 	public Optional<Curso> findByIdProfesorAsignatura(String asignatura);
-	
+
 	@Query("{alumnoCurso: {$in: ['?0']}, idYear:'?1'}")
 	public Optional<Curso> findByIdAlumnoCursoAndIdYear(String alumnoCursoId, String idYear);
 
 	@Query("{alumnoCurso: {$in: ['?0']} }")
 	public Optional<Curso> findByIdAlumnoCurso(String alumnoCursoId);
-	
+
 }

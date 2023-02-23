@@ -19,6 +19,6 @@ public interface ProfesorAsignaturaRepository extends MongoRepository<ProfesorAs
 	@Query("{profesorId:'?0', asignaturaId:'?1'}")
 	public Optional<ProfesorAsignatura> findProfesorAsignatura(String profesorId, String asignaturaId);
 
-	public Optional<ProfesorAsignatura> findByIdCurso(String idCurso);
+	public List<ProfesorAsignatura> findByIdCurso(String idCurso);
 
 }
